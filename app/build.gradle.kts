@@ -1,6 +1,10 @@
+import org.gradle.kotlin.dsl.sourceSets
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.android.hilt)
 }
 
 android {
@@ -18,7 +22,6 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -50,4 +53,27 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+    ksp(libs.bundles.dagger.ksp)
+    //hilt
+    implementation(libs.hilt.dagger)
+    //navigation
+    implementation(libs.navigation.compose)
+    implementation(libs.androidx.hilt.navigation.compose)
+    //coil
+    implementation(libs.coil)
+    //room
+    implementation(libs.bundles.room.impl)
+    ksp(libs.room.compiler)
+    //retrofit
+    implementation(libs.bundles.retrofit)
+    //coroutines
+    implementation(libs.coroutines.core)
+    implementation(libs.coroutines.android)
+    //work manager
+    implementation(libs.work.runtime.ktx)
+    implementation(libs.compose.ui)
+
+    implementation(libs.serialization.json)
+    implementation(libs.androidx.compose.foundation.layout)
+    implementation(libs.androidx.compose.foundation)
 }
