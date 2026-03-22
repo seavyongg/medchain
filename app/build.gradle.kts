@@ -19,8 +19,9 @@ android {
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "BASE_URL_API","\"${project.findProperty("BASE_URL_API") ?: "https://default.url/"}\"")
+
     }
     buildTypes {
         release {
@@ -34,6 +35,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -76,4 +78,5 @@ dependencies {
     implementation(libs.serialization.json)
     implementation(libs.androidx.compose.foundation.layout)
     implementation(libs.androidx.compose.foundation)
-}
+    implementation(libs.androidx.core.splashscreen)
+    }
