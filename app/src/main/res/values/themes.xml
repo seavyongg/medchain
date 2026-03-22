@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <style name="Theme.MedChain" parent="android:Theme.Material.Light.NoActionBar" />
+    <!-- Splash screen theme (pre-Android 12 style + compatible with new API) -->
+    <style name="Theme.MedChain.Splash" parent="Theme.SplashScreen">
+        <!-- Background color under the splash icon -->
+        <item name="windowSplashScreenBackground">@color/primary</item>
+
+        <!-- The icon shown in the splash (can be your logo or the same as launcher) -->
+        <item name="android:windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+
+        <!-- Optional: Keep on screen for a minimum time (ms) on Android 12+ -->
+         <item name="windowSplashScreenAnimationDuration">400</item>
+
+        <!-- Theme to apply AFTER the splash screen finishes -->
+        <item name="postSplashScreenTheme">@style/Theme.MedChain</item>
+    </style>
 </resources>
