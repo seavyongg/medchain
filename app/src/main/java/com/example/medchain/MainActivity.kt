@@ -19,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.medchain.Feature.unauthorized.ScreenClaimToken
+import com.example.medchain.Feature.unauthorized.ScreenOnBoarding
 import com.example.medchain.ui.theme.MedChainTheme
 
 class MainActivity : ComponentActivity() {
