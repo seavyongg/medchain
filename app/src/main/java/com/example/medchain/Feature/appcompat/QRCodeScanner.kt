@@ -31,8 +31,8 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun ScanCode(
-    onQrCodeDetected: (String) -> Unit, // Callback to handle detected QR/barcode
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigateTo: (qrcode: String) -> Unit = { _ -> } // Optional navigation callback, default does nothing
 ) {
     // State to hold the detected barcode value
     var barcode by remember { mutableStateOf<String?>(null) }
@@ -116,7 +116,7 @@ fun ScanCode(
             delay(100) // Adjust delay as needed
 
             // Call the callback with the detected barcode value
-            onQrCodeDetected(barcode ?: "")
+            navigateTo(barcode ?: "")
         }
 
         // Draw a rectangle around the detected barcode

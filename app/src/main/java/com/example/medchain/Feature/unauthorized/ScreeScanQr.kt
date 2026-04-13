@@ -109,7 +109,7 @@ fun ScreenScanAuth(
         }
     } else {
         // If no barcode has been scanned, show the QR/barcode scanner
-        ScanCode(onQrCodeDetected = {
+        ScanCode(navigateTo = {
             barcode = it // Update the barcode state with the scanned value
         })
     }
