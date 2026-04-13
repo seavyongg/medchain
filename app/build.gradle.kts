@@ -80,4 +80,14 @@ dependencies {
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.core.splashscreen)
     implementation (libs.androidx.compose.material.icons.extended)
-    }
+
+    //androidX
+    implementation(libs.camera.mlkit.vision)
+    implementation(libs.mlkit.barcode.scanning)
+
+    implementation(libs.androidx.camera.core)
+    implementation(libs.camera.camera2)
+    implementation(libs.camera.lifecycle)
+    implementation(libs.camera.view)
+    implementation(libs.accompanistPermissions)
+}
