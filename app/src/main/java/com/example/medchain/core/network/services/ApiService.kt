@@ -4,6 +4,8 @@ import android.content.Context
 import android.util.Log
 import com.example.medchain.BuildConfig
 import com.example.medchain.core.data.ClaimTokenRequest
+import com.example.medchain.core.data.DoctorRequest
+import com.example.medchain.core.data.DoctorResponse
 import com.example.medchain.core.data.ProfileResponse
 import com.example.medchain.core.network.interceptor.NetworkConnectionInterceptor
 import com.example.medchain.core.network.interceptor.TokenInterceptor
@@ -17,6 +19,11 @@ interface ApiService {
     suspend fun claimToken(
         @Body token: ClaimTokenRequest
     ): Response<ProfileResponse>
+
+    @POST("hospital-scan")
+    suspend fun hospitalScan(
+        @Body token: DoctorRequest
+    ): Response<DoctorResponse>
     companion object {
         val baseUrl = BuildConfig.BASE_URL_API
         operator fun invoke(

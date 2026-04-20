@@ -79,7 +79,7 @@ fun ScreenOnBoarding(
                     modifier = Modifier ,
                     fontSize = 15.sp ,
                     fontWeight = FontWeight.Medium,
-                    textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                    textAlign = TextAlign.Center,
                 )
             }
         }
