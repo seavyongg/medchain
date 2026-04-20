@@ -74,19 +74,7 @@ fun AppNavigation(
                         )
                     }
                 }
-                else -> {
-                DynamicPermissionDialog(
-                    title = "Camera permission required",
-                    description = if (cameraPermission.status.shouldShowRationale) {
-                        "Camera access is needed to scan QR codes."
-                    } else {
-                        "Please grant camera permission to continue."
-                    },
-                    buttonText = "Grant Permission",
-                    onConfirm = { cameraPermission.launchPermissionRequest() },
-                    onDismissRequest = { /* optional: navController.popBackStack() */ }
-                )
-            }
+                else -> {}
             }
         }
     }

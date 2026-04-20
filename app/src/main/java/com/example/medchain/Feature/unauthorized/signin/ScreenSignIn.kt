@@ -1,6 +1,7 @@
 package com.example.medchain.Feature.unauthorized.signin
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -20,6 +21,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.example.medchain.Feature.appcompat.DynamicPermissionDialog
+import com.example.medchain.core.data.ClaimTokenRequest
+import kotlin.math.sign
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -33,7 +37,17 @@ fun ScreenSignIn(
     // 1. State management
     var showCredential by remember { mutableStateOf(false) }
     val displayCredential = if (showCredential) scannedToken ?: "No credential found" else "••••••••••••••••••••••••••••••"
-
+    val signInState by viewModel.signInState.collectAsState()
+    var errorMessage by remember { mutableStateOf("") }
+    LaunchedEffect(signInState) {
+        when (signInState) {
+            is SignInState.Success -> onNavigateTo()
+            is SignInState.Error -> {
+                errorMessage = "Sign In not successful. Please try again."
+            }
+            else -> {}
+        }
+    }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -59,6 +73,19 @@ fun ScreenSignIn(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
+            if(errorMessage.isNotEmpty()){
+                DynamicPermissionDialog(
+                    title = "Sign In Failed",
+                    description = errorMessage,
+                    buttonText = "OK",
+                    onConfirm = {
+                        errorMessage = ""
+                    },
+                    onDismissRequest = {
+                        errorMessage = ""
+                    }
+                )
+            }
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -98,10 +125,17 @@ fun ScreenSignIn(
                 }
 
                 Button(
-                    onClick = onNavigateTo,
+                    onClick = {
+                        viewModel.signIn(
+                            signInRequest = ClaimTokenRequest(claimToken = scannedToken ?: "")
+                        )
+                    },
                     modifier = Modifier
                         .fillMaxWidth(0.7f) // Better responsiveness than wrapContent
-                        .height(60.dp),
+                        .height(60.dp)
+                        .clickable{
+
+                        },
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.primary

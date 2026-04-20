@@ -24,24 +24,19 @@ class SignInViewModel @Inject constructor(
     private val repository: SignInRepository,
     val sharePreferences : MySharedPreference
 ): ViewModel() {
-    private val _signInState = MutableStateFlow<SignInState>(SignInState.Idle)
+    private val _signInState = MutableStateFlow<SignInState>(SignInState.Loading)
     private val _isLoggedIn = MutableStateFlow( sharePreferences.getToken() != null )
-    private val _tokenState = MutableStateFlow<TokenState>(TokenState.Loading)
-    var tokenState : StateFlow<TokenState> = _tokenState
     val isLoggedIn : StateFlow<Boolean> = _isLoggedIn
     val signInState : StateFlow<SignInState> = _signInState
     var token by mutableStateOf("")
     fun onTokenChanged(tokenAuth: String): String {
         var message = ""
         token = tokenAuth
-        _tokenState.value = TokenState.Success(tokenAuth)
         if (tokenAuth.isEmpty()){
             message = "Token is required"
-            _tokenState.value = TokenState.Error(message)
         }
         else if (tokenAuth.length < 10){
             message = "Token must be at least 10 characters long"
-            _tokenState.value = TokenState.Error(message)
         }
         if(tokenAuth.isNotEmpty()){
             token = ConfirmInfo(tokenAuth).toConfirmInfoRequest().token
@@ -55,11 +50,11 @@ class SignInViewModel @Inject constructor(
             try {
                 val request = signInRequest.copy(claimToken = signInRequest.claimToken)
                 val response = repository.userSignIn(request)
-                val success = response.token
+                val success = response.data.token
                 if (success.isNotEmpty()) {
-                    _signInState.value = SignInState.Success(response.token)
+                    _signInState.value = SignInState.Success(response.data.token)
                     _isLoggedIn.value = true
-                    sharePreferences.saveToken(response.token)
+                    sharePreferences.saveToken(response.data.token)
                 } else {
                     _signInState.value = SignInState.Error("Invalid response from server")
                 }
@@ -78,14 +73,6 @@ class SignInViewModel @Inject constructor(
     fun resetState() {
         _signInState.value = SignInState.Idle
     }
-    fun resetAllState() {
-        _tokenState.value = TokenState.Idle
-    }
 
-    override fun onCleared() {
-        super.onCleared()
-        Log.d("SignInViewModel", "ViewModel cleared, resetting state.")
-        resetAllState()
-    }
 
 }

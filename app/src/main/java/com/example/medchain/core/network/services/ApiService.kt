@@ -17,7 +17,6 @@ interface ApiService {
     suspend fun claimToken(
         @Body token: ClaimTokenRequest
     ): Response<ProfileResponse>
-
     companion object {
         val baseUrl = BuildConfig.BASE_URL_API
         operator fun invoke(

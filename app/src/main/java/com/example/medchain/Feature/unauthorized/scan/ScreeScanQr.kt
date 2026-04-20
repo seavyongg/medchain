@@ -82,8 +82,7 @@ fun ScreenScanAuth(
     }
     DisposableEffect(Unit) {
         onDispose {
-            //clean up if needed when the composable is removed from the composition
-            viewModel.resetState()
+            barcode = null
         }
     }
     ScanCode(
