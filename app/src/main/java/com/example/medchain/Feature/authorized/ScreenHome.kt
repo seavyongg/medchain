@@ -22,8 +22,12 @@ import com.example.medchain.Feature.appcompat.AppBottomNavigation
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScreenHome() {
+fun ScreenHome(
+    modifier: Modifier = Modifier,
+    navigateTo: (String) -> Unit = {},
+) {
     Scaffold(
+        modifier = modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.background,
         bottomBar = { AppBottomNavigation() }
     ) { paddingValues ->

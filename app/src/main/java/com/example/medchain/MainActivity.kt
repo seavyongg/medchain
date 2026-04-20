@@ -13,9 +13,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.example.medchain.Feature.unauthorized.ScreenScanAuth
+import androidx.navigation.compose.rememberNavController
+import com.example.medchain.core.network.interceptor.NetworkConnectionInterceptor
+import com.example.medchain.graphs.AppNavigation
 import com.example.medchain.ui.theme.MedChainTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,12 +45,14 @@ class MainActivity : ComponentActivity() {
 
                 // Main Compose content
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-//                    ScreenClaimToken(
-//                        modifier = Modifier.padding(innerPadding)
-//                    )
-                    ScreenScanAuth(
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    if ( !NetworkConnectionInterceptor(this).isConnected() ) {
+                        ScreenNoInternet()
+                    } else {
+                        AppNavigation(
+                            navController = rememberNavController(),
+                            modifier = Modifier.padding(innerPadding)
+                        )
+                    }
                 }
             }
         }

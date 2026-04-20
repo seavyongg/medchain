@@ -14,8 +14,8 @@ import retrofit2.http.POST
 
 interface ApiService {
     @POST("claim")
-    suspend fun claim(
-        @Body info: ClaimTokenRequest
+    suspend fun claimToken(
+        @Body token: ClaimTokenRequest
     ): Response<ProfileResponse>
 
     companion object {
