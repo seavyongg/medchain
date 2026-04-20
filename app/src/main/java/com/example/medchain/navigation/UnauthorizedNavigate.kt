@@ -23,7 +23,7 @@ fun NavGraphBuilder.unauthorizedNavigate(
         },
         onNavigateSuccess = {
             navController.navigate(UnauthorizedRoute.Success.route)
-        }
+        },
     )
     screenSuccess(
         onBackPress = {
@@ -37,8 +37,8 @@ fun NavGraphBuilder.unauthorizedNavigate(
         onBackPress = {
             navController.popBackStack()
         },
-        navigateTo = {
-            navController.navigateToSignIn()
+        navigateTo = {confirmInfo ->
+            navController.navigateToSignIn(confirmInfo)
         }
     )
 }

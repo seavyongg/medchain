@@ -20,6 +20,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -27,8 +28,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.medchain.Feature.appcompat.DynamicPermissionDialog
 import com.example.medchain.Feature.appcompat.ScanCode
+import com.example.medchain.Feature.unauthorized.signin.SignInViewModel
 import com.example.medchain.core.data.ConfirmInfo
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 @OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterial3Api::class) // Opt-in to use experimental permissions API
@@ -37,6 +40,7 @@ fun ScreenScanAuth(
     modifier: Modifier = Modifier,
     navigateTo: (confirmInfo: ConfirmInfo) -> Unit = {},
     onBackPress: () -> Unit = {},
+    viewModel: SignInViewModel = hiltViewModel()
 ) {
 
     // State to hold the scanned barcode value, saved across recompositions
@@ -55,7 +59,7 @@ fun ScreenScanAuth(
             val confirmInfo = ConfirmInfo(code)
             navigateTo(confirmInfo)
         }.onFailure {
-            errorMessage = "Failed to process the scanned code. Please try again."
+            errorMessage = viewModel.onTokenChanged(code)
             barcode = null // Reset barcode to allow rescanning
         }
     }
@@ -76,9 +80,19 @@ fun ScreenScanAuth(
             }
         )
     }
+    DisposableEffect(Unit) {
+        onDispose {
+            //clean up if needed when the composable is removed from the composition
+            viewModel.resetState()
+        }
+    }
     ScanCode(
         navigateTo = {
-            navigateTo(ConfirmInfo(it))
+            barcode = it
+            val confirmInfo = ConfirmInfo(it)
+            viewModel.token = it // Update the ViewModel's token variable
+            viewModel.onTokenChanged(it)
+            navigateTo(confirmInfo)
         },
     )
     // Check if a barcode has been scanned

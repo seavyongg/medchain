@@ -1,34 +1,15 @@
 package com.example.medchain.Feature.unauthorized.signin
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,21 +17,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScreenSignIn(
-    modifier : Modifier = Modifier,
-    onNavigateTo : () -> Unit = {},
+    modifier: Modifier = Modifier,
+    onNavigateTo: () -> Unit = {},
     onBackPress: () -> Unit = {},
+    viewModel: SignInViewModel = hiltViewModel(),
+    scannedToken: String? = null
 ) {
+    // 1. State management
     var showCredential by remember { mutableStateOf(false) }
-    var credential by remember { mutableStateOf("Your credential has been issued successfully. Please click the button below to claim your credential and start managing your health records securely.") }
-    val dots = "••••••••••••••••••••••••••••••••••••••••••"
-    val displayCredential = if (showCredential) credential else dots
+    val displayCredential = if (showCredential) scannedToken ?: "No credential found" else "••••••••••••••••••••••••••••••"
 
     Scaffold(
         topBar = {
@@ -66,81 +48,73 @@ fun ScreenSignIn(
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.Transparent,
-                    titleContentColor = Color(MaterialTheme.colorScheme.primary.value),
-                    navigationIconContentColor = Color(MaterialTheme.colorScheme.primary.value)
+                    titleContentColor = MaterialTheme.colorScheme.primary,
+                    navigationIconContentColor = MaterialTheme.colorScheme.primary
                 )
             )
         }
-    )
-    { paddingValues ->
-        Surface(modifier = modifier
-            .fillMaxSize()
-            .padding(paddingValues))
-        {
+    ) { paddingValues ->
+        Surface(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(20.dp, alignment = Alignment.CenterVertically)
+                verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterVertically)
             ) {
                 Text(
-                    text = "User Credential Issued" ,
-                    modifier = Modifier ,
-                    fontSize = 20.sp ,
-                    fontWeight = FontWeight.Medium ,
-                    color = Color(MaterialTheme.colorScheme.primary.value)
+                    text = "User Credential Issued",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.primary
                 )
+
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp)
-                        .background(Color.Gray.copy(0.2f), RoundedCornerShape(10.dp))
-                        .padding(16.dp),
+                        .background(Color.Gray.copy(0.1f), RoundedCornerShape(12.dp))
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
                         text = displayCredential,
                         modifier = Modifier.weight(1f),
                         maxLines = 1,
-                        overflow = if(showCredential) TextOverflow.Ellipsis else TextOverflow.Clip, // The native way to do it
-                        color = Color.Black,
-
+                        overflow = if(showCredential) TextOverflow.Ellipsis else TextOverflow.Clip,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        style = MaterialTheme.typography.bodyMedium
                     )
-                   if(showCredential){
-                            IconButton(onClick = { showCredential = false }) {
-                                Icon(Icons.Default.Visibility, contentDescription = "Hide Credential")
-                            }
-                   } else {
-                          IconButton(onClick = { showCredential = true }) {
-                            Icon(Icons.Default.VisibilityOff, contentDescription = "Show Credential")
-                          }
-                   }
+
+                    IconButton(onClick = { showCredential = !showCredential }) {
+                        Icon(
+                            imageVector = if (showCredential) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                            contentDescription = if (showCredential) "Hide" else "Show",
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
                 }
+
                 Button(
                     onClick = onNavigateTo,
                     modifier = Modifier
-                        .wrapContentWidth()
-                        .height(80.dp)
-                        .padding(
-                            vertical = 10.dp
-                        ),
-                    shape = RoundedCornerShape(10.dp),
-                    colors = ButtonDefaults.buttonColors(Color(MaterialTheme.colorScheme.primary.value))
+                        .fillMaxWidth(0.7f) // Better responsiveness than wrapContent
+                        .height(60.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary
+                    )
                 ) {
                     Text(
-                        text = "Claim your credential" ,
-                        modifier = Modifier ,
-                        fontSize = 15.sp ,
-                        fontWeight = FontWeight.Medium,
+                        text = "Claim your credential",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center,
                     )
                 }
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ScreenClaimTokenPreview() {
-    ScreenSignIn()
 }

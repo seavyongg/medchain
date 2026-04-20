@@ -18,7 +18,9 @@ fun NavGraphBuilder.screenScanAuth(
     composable(UnauthorizedRoute.ScanAuth.route){
             ScreenScanAuth(
                 onBackPress = onBackPress,
-                navigateTo = navigateTo
+                navigateTo = {
+                    navigateTo(it)
+                }
             )
     }
 }
