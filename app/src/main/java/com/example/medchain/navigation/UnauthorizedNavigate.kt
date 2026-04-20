@@ -2,8 +2,11 @@ package com.example.speediz.ui.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import com.example.medchain.Feature.unauthorized.scan.navigateToScanAuth
+import com.example.medchain.Feature.unauthorized.scan.screenScanAuth
 import com.example.medchain.Feature.unauthorized.screenOnBoard
 import com.example.medchain.Feature.unauthorized.signInSuccess.screenSuccess
+import com.example.medchain.Feature.unauthorized.signin.navigateToSignIn
 import com.example.medchain.Feature.unauthorized.signin.screenSignIn
 
 fun NavGraphBuilder.unauthorizedNavigate(
@@ -11,7 +14,7 @@ fun NavGraphBuilder.unauthorizedNavigate(
 ) {
     screenOnBoard(
         onNavigateToSignIn = {
-            navController.navigate(UnauthorizedRoute.SignIn.route)
+            navController.navigateToScanAuth()
         }
     )
     screenSignIn(
@@ -28,6 +31,14 @@ fun NavGraphBuilder.unauthorizedNavigate(
         },
         onNavigateTo = {
             navController.navigate(AuthorizedRoute.Home.route)
+        }
+    )
+    screenScanAuth(
+        onBackPress = {
+            navController.popBackStack()
+        },
+        navigateTo = {
+            navController.navigateToSignIn()
         }
     )
 }

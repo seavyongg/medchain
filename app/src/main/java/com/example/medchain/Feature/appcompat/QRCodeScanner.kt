@@ -27,6 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import com.google.mlkit.vision.barcode.common.Barcode
 import kotlinx.coroutines.delay
+import androidx.compose.ui.platform.LocalResources
 
 
 @Composable
@@ -121,6 +122,18 @@ fun ScanCode(
 
         // Draw a rectangle around the detected barcode
         DrawRectangle(rect = boundingRect)
+    } else {
+        // If no barcode is detected, draw a default rectangle in the center of the screen as a guide
+        val screenWidth = LocalResources.current.displayMetrics.widthPixels
+        val screenHeight = LocalResources.current.displayMetrics.heightPixels
+        val rectSize = 500 // Size of the rectangle (adjust as needed)
+        val boundingRectDefaults = Rect(
+            (screenWidth - rectSize) / 2, // Left
+            (screenHeight - rectSize) / 2, // Top
+            (screenWidth + rectSize) / 2, // Right
+            (screenHeight + rectSize) / 2  // Bottom
+        )
+        DrawRectangle(rect = boundingRectDefaults)
     }
 }
 
