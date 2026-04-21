@@ -23,6 +23,7 @@ import com.example.medchain.ScreenNoInternet
 import com.example.medchain.core.network.interceptor.NetworkConnectionInterceptor
 import com.example.speediz.ui.navigation.AuthorizedRoute
 import com.example.speediz.ui.navigation.UnauthorizedRoute
+import com.example.speediz.ui.navigation.authorizedNavigate
 import com.example.speediz.ui.navigation.unauthorizedNavigate
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
@@ -70,6 +71,9 @@ fun AppNavigation(
                         modifier = modifier,
                     ) {
                         unauthorizedNavigate(
+                            navController = navController
+                        )
+                        authorizedNavigate(
                             navController = navController
                         )
                     }

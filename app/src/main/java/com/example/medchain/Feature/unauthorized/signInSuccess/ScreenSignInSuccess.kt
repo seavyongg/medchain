@@ -39,7 +39,7 @@ fun ScreenSuccess(
         ) {
             // Title Text
             Text(
-                text = "Approval Successfully",
+                text = "Claimed Successfully",
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Medium,
                 color = MaterialTheme.colorScheme.primary,
@@ -81,8 +81,7 @@ fun ScreenSuccess(
                 onClick = onBackPress,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp)
-                    .clickable { onNavigateTo() },
+                    .height(56.dp) ,
                 shape = RoundedCornerShape(8.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.primary

@@ -40,10 +40,10 @@ fun ScreenSignIn(
     val signInState by viewModel.signInState.collectAsState()
     var errorMessage by remember { mutableStateOf("") }
     LaunchedEffect(signInState) {
-        when (signInState) {
+        when (val state = signInState) {
             is SignInState.Success -> onNavigateTo()
             is SignInState.Error -> {
-                errorMessage = "Sign In not successful. Please try again."
+                errorMessage = state.message
             }
             else -> {}
         }

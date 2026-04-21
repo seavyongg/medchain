@@ -59,7 +59,6 @@ fun ScreenScanAuth(
             val confirmInfo = ConfirmInfo(code)
             navigateTo(confirmInfo)
         }.onFailure {
-            errorMessage = viewModel.onTokenChanged(code)
             barcode = null // Reset barcode to allow rescanning
         }
     }
@@ -90,7 +89,6 @@ fun ScreenScanAuth(
             barcode = it
             val confirmInfo = ConfirmInfo(it)
             viewModel.token = it // Update the ViewModel's token variable
-            viewModel.onTokenChanged(it)
             navigateTo(confirmInfo)
         },
     )

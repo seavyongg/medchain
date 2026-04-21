@@ -37,6 +37,7 @@ interface ApiService {
                 .addInterceptor { chain ->
                     val request = chain.request()
                     Log.d("REQUEST", "URL: ${request.url}, Headers: ${request.headers}")
+                    Log.d("NetworkCheck", "Current URL is: $baseUrl}")
                     chain.proceed(request)
                 }
                 .build()

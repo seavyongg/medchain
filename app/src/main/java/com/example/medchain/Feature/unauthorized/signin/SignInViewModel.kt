@@ -29,29 +29,14 @@ class SignInViewModel @Inject constructor(
     val isLoggedIn : StateFlow<Boolean> = _isLoggedIn
     val signInState : StateFlow<SignInState> = _signInState
     var token by mutableStateOf("")
-    fun onTokenChanged(tokenAuth: String): String {
-        var message = ""
-        token = tokenAuth
-        if (tokenAuth.isEmpty()){
-            message = "Token is required"
-        }
-        else if (tokenAuth.length < 10){
-            message = "Token must be at least 10 characters long"
-        }
-        if(tokenAuth.isNotEmpty()){
-            token = ConfirmInfo(tokenAuth).toConfirmInfoRequest().token
-        }
-        return message
-    }
     fun signIn( signInRequest : ClaimTokenRequest ) {
-        if ( _signInState.value is SignInState.ValidationError) return
         viewModelScope.launch {
             _signInState.value = SignInState.Loading
             try {
                 val request = signInRequest.copy(claimToken = signInRequest.claimToken)
                 val response = repository.userSignIn(request)
                 val success = response.data.token
-                if (success.isNotEmpty()) {
+                if (success!!.isNotEmpty()) {
                     _signInState.value = SignInState.Success(response.data.token)
                     _isLoggedIn.value = true
                     sharePreferences.saveToken(response.data.token)

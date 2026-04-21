@@ -4,7 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import com.example.medchain.Feature.authorized.screenHome
 
-fun NavGraphBuilder.deliveryAuthorizedNavigate(
+fun NavGraphBuilder.authorizedNavigate(
     navController: NavController
 ){
     screenHome(

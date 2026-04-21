@@ -1,5 +1,6 @@
 package com.example.medchain.core.data
 
+import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -9,15 +10,15 @@ data class ProfileResponse(
 ) {
     data class Data(
         val user: User,
-        val token: String,
+        val token: String?= null,
     ){
         data class User(
-            @SerialName("first_name")
-            val firstName: String,
-            @SerialName("last_name")
-            val lastName: String,
-            @SerialName("nid")
-            val nid: String,
+            @SerializedName("first_name")
+            val firstName: String ?= null,
+            @SerializedName("last_name")
+            val lastName: String ?= null,
+            @SerializedName("nid")
+            val nid: String ?= null,
         )
     }
 }
