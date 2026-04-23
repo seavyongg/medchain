@@ -7,20 +7,19 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.example.medchain.Feature.unauthorized.ScreenClaimToken
+import androidx.navigation.compose.rememberNavController
+import com.example.medchain.core.network.interceptor.NetworkConnectionInterceptor
+import com.example.medchain.graphs.AppNavigation
 import com.example.medchain.ui.theme.MedChainTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,9 +45,14 @@ class MainActivity : ComponentActivity() {
 
                 // Main Compose content
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    ScreenClaimToken(
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    if ( !NetworkConnectionInterceptor(this).isConnected() ) {
+                        ScreenNoInternet()
+                    } else {
+                        AppNavigation(
+                            navController = rememberNavController(),
+                            modifier = Modifier.padding(innerPadding)
+                        )
+                    }
                 }
             }
         }

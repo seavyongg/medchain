@@ -1,4 +1,5 @@
 import org.gradle.kotlin.dsl.sourceSets
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
@@ -9,9 +10,7 @@ plugins {
 
 android {
     namespace = "com.example.medchain"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.medchain"
@@ -20,8 +19,14 @@ android {
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "BASE_URL_API","\"${project.findProperty("BASE_URL_API") ?: "https://default.url/"}\"")
-
+        val localProps = Properties().apply {
+            val file = rootProject.file("local.properties")
+            if (file.exists()) {
+                file.inputStream().use { load(it) }
+            }
+        }
+        val baseUrlApi = localProps.getProperty("BASE_URL_API", "https://default.url/")
+        buildConfigField("String", "BASE_URL_API", "\"$baseUrlApi\"")
     }
     buildTypes {
         release {
@@ -79,4 +84,15 @@ dependencies {
     implementation(libs.androidx.compose.foundation.layout)
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.core.splashscreen)
-    }
+    implementation (libs.androidx.compose.material.icons.extended)
+
+    //androidX
+    implementation(libs.camera.mlkit.vision)
+    implementation(libs.mlkit.barcode.scanning)
+
+    implementation(libs.androidx.camera.core)
+    implementation(libs.camera.camera2)
+    implementation(libs.camera.lifecycle)
+    implementation(libs.camera.view)
+    implementation(libs.accompanistPermissions)
+}
