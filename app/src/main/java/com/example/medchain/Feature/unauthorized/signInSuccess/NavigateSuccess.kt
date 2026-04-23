@@ -12,12 +12,10 @@ fun NavController.navigationSuccess(
 }
 fun NavGraphBuilder.screenSuccess(
     onBackPress: () -> Unit,
-    onNavigateTo: () -> Unit,
 ){
     composable(UnauthorizedRoute.Success.route){
         ScreenSuccess(
-            onBackPress = onBackPress,
-            onNavigateTo = onNavigateTo,
+            onBackPress = onBackPress
         )
     }
 }

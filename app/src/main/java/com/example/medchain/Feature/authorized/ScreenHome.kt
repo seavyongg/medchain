@@ -29,7 +29,11 @@ fun ScreenHome(
     Scaffold(
         modifier = modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.background,
-        bottomBar = { AppBottomNavigation() }
+        bottomBar = {
+            AppBottomNavigation(
+                navigateToItem = navigateTo
+            )
+        }
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier

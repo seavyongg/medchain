@@ -31,12 +31,6 @@ fun NavGraphBuilder.unauthorizedNavigate(
                 popUpTo(UnauthorizedRoute.Onboarding.route) { inclusive = true }
             }
         },
-        onNavigateTo = {
-            //after success reset to home
-            navController.navigate(AuthorizedRoute.Home.route) {
-                popUpTo(UnauthorizedRoute.Onboarding.route) { inclusive = true }
-            }
-        }
     )
     screenScanAuth(
         onBackPress = {

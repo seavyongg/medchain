@@ -1,7 +1,6 @@
-package com.example.medchain.Feature.unauthorized.signInSuccess
+package com.example.medchain.Feature.authorized.scanhospital
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,14 +18,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.medchain.ui.theme.MedChainTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
-fun ScreenSuccess(
-    onBackPress: () -> Unit,
+fun ScreenApprovalSuccess(
+    modifier: Modifier = Modifier,
+    onBackHome: () -> Unit = {},
 )
 {
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.background
     ) { innerPadding ->
         Column(
@@ -78,7 +78,7 @@ fun ScreenSuccess(
 
             // Back Home Button
             Button(
-                onClick = onBackPress,
+                onClick = onBackHome,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp) ,
@@ -95,15 +95,5 @@ fun ScreenSuccess(
                 )
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ScreenSuccessPreview() {
-    MedChainTheme {
-        ScreenSuccess(
-            onBackPress = {},
-        )
     }
 }

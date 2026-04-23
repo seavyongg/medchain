@@ -16,9 +16,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.medchain.Feature.authorized.NavigationItem
+import com.example.speediz.ui.navigation.AuthorizedRoute
 
 @Composable
-fun AppBottomNavigation() {
+fun AppBottomNavigation(
+    navigateToItem: (String) -> Unit = {},
+) {
     NavigationBar(
         containerColor = Color.White,
         tonalElevation = 8.dp
@@ -32,7 +35,14 @@ fun AppBottomNavigation() {
         items.forEachIndexed { index, item ->
             NavigationBarItem(
                 selected = index == 0 ,
-                onClick = {} ,
+                onClick = {
+                    when(index){
+                        0 -> navigateToItem(AuthorizedRoute.Home.route)
+                        1 -> navigateToItem(AuthorizedRoute.History.route)
+                        2 -> navigateToItem(AuthorizedRoute.scanHospitalQr.route)
+                        3 -> navigateToItem(AuthorizedRoute.Account.route)
+                    }
+                } ,
                 icon = { Icon(item.icon, contentDescription = item.title) } ,
                 label = { Text(item.title, fontSize = 10.sp) } ,
                 colors = NavigationBarItemDefaults.colors(
